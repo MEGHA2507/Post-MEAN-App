@@ -1,0 +1,16 @@
+:host{
+  display: block;
+  margin-top: 20px;
+  width: 80%;
+  margin: auto;
+}
+
+.info-text{
+  margin-top: 20px;
+  text-align: center;
+}
+
+.mat-mdc-form-field + .mat-mdc-form-field {
+  margin-left: 8px;
+}
+

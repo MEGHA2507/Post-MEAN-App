@@ -6,9 +6,15 @@
 
 <!-- <textarea rows="6" [(ngModel)]="enteredValue"></textarea> -->
 <mat-card>
+
   <mat-form-field class="example-full-width">
 
-    <textarea matInput  rows="6" [(ngModel)]="enteredValue"></textarea>
+    <input matInput  [(ngModel)]="enteredTitle"  [(ngModel)]="enteredTitle"/>
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width">
+
+    <textarea matInput  rows="6" [(ngModel)]="enteredContent"></textarea>
   </mat-form-field>
 
   <span>

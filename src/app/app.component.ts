@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import {Post} from './posts/post.model';
 
 @Component({
   selector: 'app-root',
@@ -7,9 +8,9 @@ import { Component, Input } from '@angular/core';
 })
 export class AppComponent {
   title = 'mean-course';
-  postsList: Array<{title: string, content: string}>=[];
+  postsList: Post[]=[];
 
-  postAdded(post: any){
+  postAdded(post: Post){
     console.log(post);
     this.postsList.push(post);
   }

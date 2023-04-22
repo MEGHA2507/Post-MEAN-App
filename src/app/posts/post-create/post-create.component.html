@@ -19,6 +19,7 @@
 
   <form (submit)="onAddPost(postForm)" #postForm="ngForm">
     <mat-form-field class="example-full-width">
+      <mat-label>Post Title</mat-label>
       <input
       matInput
       ngModel name="title"
@@ -30,6 +31,7 @@
       </mat-error>
     </mat-form-field>
     <mat-form-field class="example-full-width">
+      <mat-label>Post Content</mat-label>
       <textarea
       matInput
       rows="6"

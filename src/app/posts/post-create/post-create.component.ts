@@ -39,6 +39,7 @@ export class PostCreateComponent {
 
   this.postService.addPost(post);
   // this.addPost.emit(post);
+  form.resetForm();
   }
 
 }

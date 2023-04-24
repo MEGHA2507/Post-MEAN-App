@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs';
 })
 export class PostListComponent implements OnInit, OnDestroy{
 
-  @Input() posts: Post[]=[
+  @Input() posts: Post[]=[ 
     //   {title: 'First Post', content: 'This is the post content'},
     // {title: 'Second Post', content: 'This is the post content'},
     // {title: 'Third Post', content: 'This is the post content'}

@@ -1,0 +1,14 @@
+
+
+<mat-card>
+    <mat-form-field class="example-full-width">
+        <mat-label>Leave a comment</mat-label>
+        <textarea matInput rows="6" cols="50" [(ngModel)]="enterValue" ></textarea>
+    </mat-form-field>
+
+     <div class="example-button-row">
+         <button matButton="outlined" (click)="onSavePost()">Save Post</button>
+     </div>
+   
+</mat-card>
+  <p>{{ newPost }}</p>

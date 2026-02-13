@@ -1,18 +1,46 @@
 
 
 <mat-card>
-    <mat-form-field>
-        <input matInput type="text" [(ngModel)]="enteredTitle" />
-    </mat-form-field>
-    
-    <mat-form-field class="example-full-width">
-        <mat-label>Leave a comment</mat-label>
-        <textarea matInput rows="6" cols="50" [(ngModel)]="enteredContent" ></textarea>
-    </mat-form-field>
+    <form (submit)="onSavePost(postForm)" #postForm="ngForm">
+        <mat-form-field>
+            <input
+                matInput 
+                type="text" 
+                name="postTitle" 
+                ngModel
+                required 
+                minlength="10"
+                #postTitle="ngModel"
+             />
+             <mat-error *ngIf="postTitle.invalid">Please enter a post title</mat-error>
 
-     <div class="example-button-row">
-         <button matButton="outlined" (click)="onSavePost()">Save Post</button>
-     </div>
-   
+        </mat-form-field>
+        
+        
+        <mat-form-field class="example-full-width">
+            <mat-label>Leave a comment</mat-label>
+            <textarea
+                matInput 
+                rows="6" 
+                cols="50" 
+                name="postContent" 
+                ngModel 
+                required
+                maxlength="200"
+                #postContent="ngModel"
+            >
+            </textarea>
+             <mat-error *ngIf="postContent.invalid">Please enter a post title</mat-error>
+
+        </mat-form-field>
+       
+
+        <div class="example-button-row">
+            <button 
+            matButton="outlined"
+             type="submit"
+              >Save Post</button>
+        </div>
+    </form> 
 </mat-card>
  

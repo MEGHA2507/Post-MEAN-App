@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import { MatCard } from '@angular/material/card';
+import { Post } from '../post-list/post-list';
 
 @Component({
   selector: 'app-post-create',
@@ -12,13 +13,16 @@ import { MatCard } from '@angular/material/card';
 })
 export class PostCreate {
 
-  enterValue = '';
+  enteredContent = '';
+  enteredTitle = '';
+  @Output() postCreated = new EventEmitter();
 
-  newPost = 'NO CONTENT';
 
   onSavePost() {
-   
-    this.newPost = this.enterValue;
-
+   const post: Post = {
+    title: this.enteredTitle,
+    content: this.enteredContent
+   }
+   this.postCreated.emit(post);
   }
 }

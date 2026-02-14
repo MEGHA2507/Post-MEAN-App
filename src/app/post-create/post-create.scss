@@ -1,9 +1,10 @@
 mat-card{
-    margin: auto;
+   margin: auto;
+    padding: 0 0 0 40px;
 }
 
 mat-form-field, .example-button-row,
 textarea {
     width: 80%;
-    margin: 10px auto;
+    margin: 10px;
 }

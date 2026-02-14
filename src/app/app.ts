@@ -12,11 +12,11 @@ import { Post } from './model/post.model';
   styleUrl: './app.scss'
 })
 export class App {
-  protected readonly title = signal('mean-ui-code');
+  // protected readonly title = signal('mean-ui-code');
 
-  storedPosts: Post[] = [];
+  // storedPosts: Post[] = [];
 
-  onPostAdded(post: Post){
-    this.storedPosts.push(post);
-  }
+  // onPostAdded(post: Post){
+  //   this.storedPosts.push(post);
+  // }
 }

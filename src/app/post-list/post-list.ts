@@ -4,10 +4,11 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { Post } from '../model/post.model';
 import { PostsService } from '../services/posts-service';
 import { Subscription } from 'rxjs';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-post-list',
-  imports: [MatExpansionModule, CommonModule],
+  imports: [MatExpansionModule, CommonModule, MatButtonModule],
   templateUrl: './post-list.html',
   styleUrl: './post-list.scss',
 })

@@ -3,6 +3,7 @@
 <mat-card>
     <form (submit)="onSavePost(postForm)" #postForm="ngForm">
         <mat-form-field>
+            
             <input
                 matInput 
                 type="text" 
@@ -10,6 +11,7 @@
                 ngModel
                 required 
                 minlength="10"
+                placeholder="Post Title"
                 #postTitle="ngModel"
              />
              <mat-error *ngIf="postTitle.invalid">Please enter a post title</mat-error>
@@ -18,12 +20,13 @@
         
         
         <mat-form-field class="example-full-width">
-            <mat-label>Leave a comment</mat-label>
+           
             <textarea
                 matInput 
                 rows="6" 
                 cols="50" 
                 name="postContent" 
+                placeholder="Post Content"
                 ngModel 
                 required
                 maxlength="200"

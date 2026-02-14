@@ -13,3 +13,15 @@
     border: 1px solid #e5e5;
     margin-top: 30px;
 }
+
+.mat-accordion>.mat-expansion-panel-spacing:last-child{
+    margin-bottom: 20px;
+}
+
+.postlist{
+    padding: 10px;
+}
+
+.postlist:last-child{
+    padding-bottom: 40px;
+}

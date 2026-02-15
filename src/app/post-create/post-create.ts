@@ -31,7 +31,7 @@ export class PostCreate {
   //   content: form.value.postContent
   //  }
   //  this.postCreated.emit(post);
-   this.postsService.addPost(form.value.postTitle, form.value.postContent)
+   this.postsService.addPost(`${Math.ceil(Number(Math.random())*12)}`,form.value.postTitle, form.value.postContent)
    form.resetForm();
   }
 }

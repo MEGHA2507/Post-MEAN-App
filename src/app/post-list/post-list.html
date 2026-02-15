@@ -1,15 +1,20 @@
-<div *ngFor="let post of posts" class="postlist">
-    <mat-accordion multi="true" *ngIf="posts.length > 0" className="post-container">
-        <mat-expansion-panel>
-            <mat-expansion-panel-header>
-               {{post.postTitle}} 
-            </mat-expansion-panel-header>
-            <p>{{post.postContent}}</p>
-            <mat-action-row>
-                <button  matButton="filled">Edit</button>
-                <button matButton="outlined">Delete</button>
-            </mat-action-row>
-        </mat-expansion-panel>
-    </mat-accordion>
+<div *ngIf="posts.length > 0" class="postlist">
+  <mat-accordion multi="true" class="post-container">
+    <mat-expansion-panel *ngFor="let post of posts">
+      <mat-expansion-panel-header>
+        {{ post.postTitle }}
+      </mat-expansion-panel-header>
+
+      <p>{{ post.postContent }}</p>
+
+      <mat-action-row>
+        <button mat-flat-button color="primary">Edit</button>
+        <button mat-stroked-button color="warn">Delete</button>
+      </mat-action-row>
+    </mat-expansion-panel>
+  </mat-accordion>
 </div>
-<p class="mat-body-1 info-text" *ngIf="posts.length == 0">No posts added yet !!</p>
+
+<p class="mat-body-1 info-text" *ngIf="posts.length === 0">
+  No posts added yet !!
+</p>

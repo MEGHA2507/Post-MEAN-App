@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Post } from '../model/post.model';
-import { Subject } from 'rxjs';
+import { map, Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 
@@ -14,21 +14,21 @@ export class PostsService {
   constructor(private http: HttpClient){}
 
   getPosts(){
-    this.http.get<{message: string, posts: Post[]}>('http://localhost:3000/api/posts').
-    subscribe((res) => {
+    this.http.get<{message: string, posts: any}>('http://localhost:3000/api/posts')
+    .pipe(map((postData) => {
+      return postData.posts.map((post:any) => {
+        return {
+          postTitle: post.postTitle,
+          postContent: post.postContent,
+          id: post._id
+        }
+      });
+    }))
+    .subscribe((res) => {
       if(res){
         console.log(res);
-         const transformedPosts = res.posts.map(post => {
-            return {
-              id: post.id,
-              postTitle: post.postTitle,
-              postContent: post.postContent
-            };
-          });
-
-      this.posts = transformedPosts;
-      this.postsUpdated.next([...this.posts]);
-
+        this.posts = res;
+        this.postsUpdated.next([...this.posts]);
       }
     });
   }
@@ -37,10 +37,12 @@ export class PostsService {
     const post: Post = {id: id, postTitle: title, postContent: content};
      console.log(post);
 
-    this.http.post<{message: string}>('http://localhost:3000/api/posts', post)
+    this.http.post<any>('http://localhost:3000/api/posts', post)
     .subscribe((res) => {
       if(res){
         console.log(res);
+        const id= res.id;
+        post.id = id;
         this.posts.push(post);
         this.postsUpdated.next([...this.posts]);
       }
@@ -49,5 +51,15 @@ export class PostsService {
 
   getPostUpdateLister(){
     return this.postsUpdated.asObservable();
+  }
+
+  deletePost(id:string){
+    this.http.delete('http://localhost:3000/api/posts/'+id)
+    .subscribe((res) => {
+      console.log(res);
+      const updatedPosts =this.posts.filter((post)=> post.id !== id);
+      this.posts = updatedPosts;
+      this.postsUpdated.next([...this.posts]);
+    })
   }
 }

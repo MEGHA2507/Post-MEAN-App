@@ -37,18 +37,25 @@ export class PostList implements OnInit, OnDestroy{
       private cd: ChangeDetectorRef){}
 
     ngOnInit(): void {
+       this.postsService.getPosts();
       this.postsSub = this.postsService
         .getPostUpdateLister()
         .subscribe((res: Post[]) => {
+          if(res){
+             this.posts = res;
+              this.cd.detectChanges(); 
+          }
+         
           
-          console.log("Incoming posts:", res);
-          console.log("First post:", res[0]);
-          this.posts = res;
-          this.cd.detectChanges(); 
         });
-
-      this.postsService.getPosts();
+       
+     
     } 
+
+    onDelete(id:string){
+      console.log(id)
+      this.postsService.deletePost(id);
+    }
 
     ngOnDestroy(): void {
       this.postsSub.unsubscribe();

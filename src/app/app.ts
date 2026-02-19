@@ -1,13 +1,13 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { PostCreate } from "./post-create/post-create";
+//import { PostCreate } from "./post-create/post-create";
 import { Header } from "./header/header";
-import { PostList } from "./post-list/post-list";
-import { Post } from './model/post.model';
+//import { PostList } from "./post-list/post-list";
+//import { Post } from './model/post.model';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, PostCreate, Header, PostList],
+  imports: [RouterOutlet, Header],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

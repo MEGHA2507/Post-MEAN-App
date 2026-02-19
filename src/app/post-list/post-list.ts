@@ -5,10 +5,13 @@ import { Post } from '../model/post.model';
 import { PostsService } from '../services/posts-service';
 import { Subscription } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
+import { RouterLink } from '@angular/router';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+
 
 @Component({
   selector: 'app-post-list',
-  imports: [MatExpansionModule, CommonModule, MatButtonModule],
+  imports: [MatExpansionModule, MatProgressSpinnerModule, RouterLink ,CommonModule, MatButtonModule],
   templateUrl: './post-list.html',
   styleUrl: './post-list.scss',
 })
@@ -31,17 +34,20 @@ export class PostList implements OnInit, OnDestroy{
   posts: Post[]=[];
   private postsSub!: Subscription;
   postResponseAvailable = false;
+isLoading = false;
 
     constructor(
       private postsService: PostsService, 
       private cd: ChangeDetectorRef){}
 
     ngOnInit(): void {
+      this.isLoading = true;
        this.postsService.getPosts();
       this.postsSub = this.postsService
         .getPostUpdateLister()
         .subscribe((res: Post[]) => {
           if(res){
+            this.isLoading = false;
              this.posts = res;
               this.cd.detectChanges(); 
           }
@@ -55,6 +61,10 @@ export class PostList implements OnInit, OnDestroy{
     onDelete(id:string){
       console.log(id)
       this.postsService.deletePost(id);
+    }
+
+    onEdit(post: Post){
+
     }
 
     ngOnDestroy(): void {

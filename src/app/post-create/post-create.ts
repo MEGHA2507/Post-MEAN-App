@@ -20,7 +20,6 @@ export class PostCreate implements OnInit{
 
   enteredContent = '';
   enteredTitle = '';
-  // @Output() postCreated = new EventEmitter<Post>();
 
   private mode = 'create';
   private postId:any = null;
@@ -58,7 +57,6 @@ export class PostCreate implements OnInit{
         this.postsService.getPost(this.postId).subscribe((res: any) => {
           if(res){
            
-            console.log(res);
             this.post = {
               id: res._id,
               postTitle: res.postTitle,
@@ -97,20 +95,15 @@ export class PostCreate implements OnInit{
     if(this.postForm.invalid){
       return;
     }
-    //console.log(form.value)
-  //  const post: Post = {
-  //   title: form.value.postTitle,
-  //   content: form.value.postContent
-  //  }
-  //  this.postCreated.emit(post);
-  this.isLoading = true;
-  if(this.mode === 'create'){
-      this.postsService.addPost('', this.postForm.value.postTitle, this.postForm.value.postContent, this.postForm.value.postImage);
+    
+    this.isLoading = true;
+    if(this.mode === 'create'){
+        this.postsService.addPost('', this.postForm.value.postTitle, this.postForm.value.postContent, this.postForm.value.postImage);
+        this.isLoading = false;
+    }else{
+      this.postsService.editPost(this.postId, this.postForm.value.postTitle, this.postForm.value.postContent, this.postForm.value.postImage);
       this.isLoading = false;
-  }else{
-    this.postsService.editPost(this.postId, this.postForm.value.postTitle, this.postForm.value.postContent, this.postForm.value.postImage);
-    this.isLoading = false;
-  }
+    }
 
    this.postForm.reset();
    

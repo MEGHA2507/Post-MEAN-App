@@ -1,9 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-//import { PostCreate } from "./post-create/post-create";
 import { Header } from "./header/header";
-//import { PostList } from "./post-list/post-list";
-//import { Post } from './model/post.model';
 
 @Component({
   selector: 'app-root',
@@ -12,11 +9,4 @@ import { Header } from "./header/header";
   styleUrl: './app.scss'
 })
 export class App {
-  // protected readonly title = signal('mean-ui-code');
-
-  // storedPosts: Post[] = [];
-
-  // onPostAdded(post: Post){
-  //   this.storedPosts.push(post);
-  // }
 }

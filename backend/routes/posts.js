@@ -1,7 +1,6 @@
 const express = require("express");
 const multer = require("multer");
 
-
 const PostModel = require('../models/post');
 
 const router = express.Router();
@@ -30,16 +29,15 @@ const storage = multer.diskStorage({
 
 
 router.post('', multer({storage:storage}).single("image"), (request, response, next) => {
-    // const post = request.body;
+   
     const url = request.protocol + '://' + request.get("host");
     const post = new PostModel({
         postTitle: request.body.postTitle,
         postContent: request.body.postContent,
         imagePath: url+"/images/"+ request.file.filename
     });
-    //console.log(post);
+   
       post.save().then((res) => {
-        console.log(res)
         response.status(201).json({
             message: "Post added successfully !!",
             post: {
@@ -55,38 +53,19 @@ router.post('', multer({storage:storage}).single("image"), (request, response, n
 
 
 router.get('', (request, response, next) => {
-    // const posts = [
-    //     {
-    //         id: '1',
-    //         postTitle: 'Post 1',
-    //         postContent: 'Post 1 content'
-    //     },
-    //     {
-    //         id: '2',
-    //         postTitle: 'Post 2',
-    //         postContent: 'Post 2 content'
-    //     },{
-    //         id: '3',
-    //          postTitle: 'Post 3',
-    //         postContent: 'Post 3 content'
-    //     }
-    // ];
-      PostModel.find().then((result)=> {
-        //console.log(result);
-
+   
+    PostModel.find().then((result)=> {
         response.status(200).json({
             message: 'Post fetched successfully',
             posts: result
         });
     });
-
-   
+  
 });
 
 
 router.delete("/:id",   (req, res, next) => {
     PostModel.deleteOne({ _id: req.params.id }).then(result => {
-    console.log(result);
     res.status(200).json({ message: "Post deleted!" });
   });
 });
@@ -107,10 +86,7 @@ router.put("/:id",  multer({storage:storage}).single("image"),  (req, res, next)
         imagePath: imagePath
     });
 
-    console.log(post);
-
       PostModel.updateOne({_id: req.params.id}, post).then((response) => {
-        console.log(response);
         res.status(200).json({ message: "Update successful"})
     })
 });

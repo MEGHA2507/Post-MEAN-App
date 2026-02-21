@@ -4,10 +4,10 @@ import { map, Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
-
 @Injectable({
   providedIn: 'root',
 })
+
 export class PostsService {
   private posts: any = [];
   private postsUpdated = new Subject<Post[]>();
@@ -37,28 +37,21 @@ export class PostsService {
   }
 
   addPost(id: string, title: string, content: string, image: File){
-    // const post: Post = {id: id, postTitle: title, postContent: content};
-    //  console.log(post);
 
      const postData = new FormData();
      postData.append("postTitle", title);
      postData.append("postContent", content);
      postData.append("image", image, title);
 
-     console.log(postData);
-
     this.http.post<any>('http://localhost:3000/api/posts', postData)
     .subscribe((res) => {
       if(res){
-        console.log(res);
         const post = {
           id: res.id,
           postTitle: title,
           postContent: content,
           imagePath: image
         }
-        // const id= res.id;
-        // post.id = id;
         this.posts.push(postData);
         this.postsUpdated.next([...this.posts]);
         this.router.navigate(['/']);
@@ -73,7 +66,6 @@ export class PostsService {
   deletePost(id:string){
     this.http.delete('http://localhost:3000/api/posts/'+id)
     .subscribe((res) => {
-      console.log(res);
       const updatedPosts =this.posts.filter((post:any)=> post.id !== id);
       this.posts = updatedPosts;
       this.postsUpdated.next([...this.posts]);
@@ -81,7 +73,6 @@ export class PostsService {
   }
 
   getPost(id:string){
-    //return {...this.posts.find((post) => post.id === id)};
     return this.http.get<{_id:string, title: string, content:string, imagePath: string}>('http://localhost:3000/api/posts/'+id);
   }
 
@@ -106,7 +97,6 @@ export class PostsService {
     this.http.put<any>('http://localhost:3000/api/posts/'+id, postData)
     .subscribe((res) => {
       if(res){
-        console.log(res);
         const updatedPosts = [...this.posts];
         const oldPostIndex = updatedPosts.findIndex((e) => e.id === id);
         const post : Post = {

@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { PostsService } from '../services/posts-service';
 import { ActivatedRoute, Router } from '@angular/router';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { mimeType } from './mime-type.validator';
 
 @Component({
   selector: 'app-post-create',
@@ -28,6 +29,7 @@ export class PostCreate implements OnInit{
   isLoading = false;
 
   postForm!: FormGroup;
+  imagePreview!: string;
 
   constructor(private postsService: PostsService,
     public route: ActivatedRoute,
@@ -40,7 +42,8 @@ export class PostCreate implements OnInit{
   createPostForm(){
     this.postForm = new FormGroup({
       postTitle: new FormControl(null, {validators: [Validators.required, Validators.minLength(3)]}),
-      postContent: new FormControl(null, {validators: [Validators.required]})
+      postContent: new FormControl(null, {validators: [Validators.required]}),
+      postImage: new FormControl(null, {validators: [Validators.required], asyncValidators: [mimeType]})
     })
   }
 
@@ -65,9 +68,9 @@ export class PostCreate implements OnInit{
              this.isLoading = false;
           }
 
-          this.postForm.setValue({
+          this.postForm.patchValue({
             postTitle: this.post.postTitle,
-            postContent: this.post.postContent
+            postContent: this.post.postContent,
           });
 
         });
@@ -75,11 +78,11 @@ export class PostCreate implements OnInit{
         this.mode = 'create';
         this.postId = null;
          this.isLoading = false;
-        this.post = {
+        this.postForm.patchValue({
             id: this.postId,
             postTitle: '',
-            postContent: ''
-          }
+            postContent: '',
+          });
       }
       this.cd.detectChanges();
     })
@@ -106,5 +109,27 @@ export class PostCreate implements OnInit{
 
    this.postForm.reset();
    
+  }
+
+  onFilePicked(event:any){
+    const file = (event.target as HTMLInputElement).files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    this.postForm.patchValue({
+      postImage: file
+    });
+
+    this.postForm.get('postImage')?.updateValueAndValidity();
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      this.imagePreview = reader.result as string;
+    };
+
+    reader.readAsDataURL(file);
   }
 }

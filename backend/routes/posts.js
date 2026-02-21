@@ -1,30 +1,60 @@
 const express = require("express");
+const multer = require("multer");
 
 
 const PostModel = require('../models/post');
 
 const router = express.Router();
 
+const MIME_TYPE_MAP = {
+    'image/png': 'png',
+    'image/jpeg': 'jpg',
+    'image/jpg': 'jpg'
+}
 
-router.post('',   (request, response, next) => {
+const storage = multer.diskStorage({
+    destination: (rq, file, cb) => {
+        const isValid = MIME_TYPE_MAP[file.mimetype];
+        let error = new Error("Invalid mime type");
+        if(isValid){
+            error = null;
+        }
+        cb(null, "backend/images"); //path it takes relative to the server.js file
+    },
+    filename: (req, file, cb) => {
+        const name = file.originalname.toLowerCase().split(' ').join('-');
+        const ext = MIME_TYPE_MAP[file.mimetype];    
+        cb(null, name+'-'+Date.now()+'.'+ext); 
+    }
+});
+
+
+router.post('', multer({storage:storage}).single("image"), (request, response, next) => {
     // const post = request.body;
+    const url = request.protocol + '://' + request.get("host");
     const post = new PostModel({
         postTitle: request.body.postTitle,
-        postContent: request.body.postContent
+        postContent: request.body.postContent,
+        imagePath: url+"/images/"+ request.file.filename
     });
     //console.log(post);
       post.save().then((res) => {
         console.log(res)
         response.status(201).json({
             message: "Post added successfully !!",
-            id: res._id
+            post: {
+                id: res.id,
+                postTitle: res.postTitle,
+                postContent: res.postContent,
+                imagePath: res.imagePath
+            }
         });
     });
    
 });
 
 
-router.get('',   (request, response, next) => {
+router.get('', (request, response, next) => {
     // const posts = [
     //     {
     //         id: '1',
@@ -82,6 +112,8 @@ router.get("/:id",   (req, res, next) => {
             res.status(404).json({message: 'Post not found!!'})
         }
     })
-})
+});
+
+
 
 module.exports = router;

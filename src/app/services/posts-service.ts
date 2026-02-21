@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
   providedIn: 'root',
 })
 export class PostsService {
-  private posts: Post[] = [];
+  private posts: any = [];
   private postsUpdated = new Subject<Post[]>();
 
   constructor(private http: HttpClient, private router: Router){}
@@ -21,7 +21,8 @@ export class PostsService {
         return {
           postTitle: post.postTitle,
           postContent: post.postContent,
-          id: post._id
+          id: post._id,
+          imagePath: post.imagePath
         }
       });
     }))
@@ -35,17 +36,30 @@ export class PostsService {
     });
   }
 
-  addPost(id: string, title: string, content: string){
-    const post: Post = {id: id, postTitle: title, postContent: content};
-     console.log(post);
+  addPost(id: string, title: string, content: string, image: File){
+    // const post: Post = {id: id, postTitle: title, postContent: content};
+    //  console.log(post);
 
-    this.http.post<any>('http://localhost:3000/api/posts', post)
+     const postData = new FormData();
+     postData.append("postTitle", title);
+     postData.append("postContent", content);
+     postData.append("image", image, title);
+
+     console.log(postData);
+
+    this.http.post<any>('http://localhost:3000/api/posts', postData)
     .subscribe((res) => {
       if(res){
         console.log(res);
-        const id= res.id;
-        post.id = id;
-        this.posts.push(post);
+        const post = {
+          id: res.id,
+          postTitle: title,
+          postContent: content,
+          imagePath: image
+        }
+        // const id= res.id;
+        // post.id = id;
+        this.posts.push(postData);
         this.postsUpdated.next([...this.posts]);
         this.router.navigate(['/']);
       }
@@ -60,7 +74,7 @@ export class PostsService {
     this.http.delete('http://localhost:3000/api/posts/'+id)
     .subscribe((res) => {
       console.log(res);
-      const updatedPosts =this.posts.filter((post)=> post.id !== id);
+      const updatedPosts =this.posts.filter((post:any)=> post.id !== id);
       this.posts = updatedPosts;
       this.postsUpdated.next([...this.posts]);
     })
@@ -71,8 +85,8 @@ export class PostsService {
     return this.http.get('http://localhost:3000/api/posts/'+id);
   }
 
-   editPost(id: string, title: string, content: string){
-    const post: Post = {id: id, postTitle: title, postContent: content};
+   editPost(id: string, title: string, content: string, image: any){
+    const post: Post = {id: id, postTitle: title, postContent: content, imagePath: image};
      console.log(post);
 
     this.http.put<any>('http://localhost:3000/api/posts/'+id, post)

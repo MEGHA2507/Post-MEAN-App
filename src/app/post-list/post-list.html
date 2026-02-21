@@ -6,6 +6,9 @@
         {{ post.postTitle }}
       </mat-expansion-panel-header>
 
+      <div class="post-image">
+        <img [src]="post.imagePath" [alt]="post.postTitle">
+      </div>
       <p>{{ post.postContent }}</p>
 
       <mat-action-row>

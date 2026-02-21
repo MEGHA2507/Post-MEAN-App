@@ -62,7 +62,8 @@ export class PostCreate implements OnInit{
             this.post = {
               id: res._id,
               postTitle: res.postTitle,
-              postContent: res.postContent
+              postContent: res.postContent,
+              imagePath: res.imagePath
             }
             this.postEditData = true;
              this.isLoading = false;
@@ -82,6 +83,7 @@ export class PostCreate implements OnInit{
             id: this.postId,
             postTitle: '',
             postContent: '',
+            imagePath: ''
           });
       }
       this.cd.detectChanges();
@@ -100,10 +102,10 @@ export class PostCreate implements OnInit{
   //  this.postCreated.emit(post);
   this.isLoading = true;
   if(this.mode === 'create'){
-      this.postsService.addPost('', this.postForm.value.postTitle, this.postForm.value.postContent);
+      this.postsService.addPost('', this.postForm.value.postTitle, this.postForm.value.postContent, this.postForm.value.postImage);
       this.isLoading = false;
   }else{
-    this.postsService.editPost(this.postId, this.postForm.value.postTitle, this.postForm.value.postContent);
+    this.postsService.editPost(this.postId, this.postForm.value.postTitle, this.postForm.value.postContent, this.postForm.value.postImage);
     this.isLoading = false;
   }
 

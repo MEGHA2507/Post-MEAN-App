@@ -13,7 +13,7 @@ const MIME_TYPE_MAP = {
 }
 
 const storage = multer.diskStorage({
-    destination: (rq, file, cb) => {
+    destination: (req, file, cb) => {
         const isValid = MIME_TYPE_MAP[file.mimetype];
         let error = new Error("Invalid mime type");
         if(isValid){
@@ -91,12 +91,23 @@ router.delete("/:id",   (req, res, next) => {
   });
 });
 
-router.put("/:id",   (req, res, next) => {
+router.put("/:id",  multer({storage:storage}).single("image"),  (req, res, next) => {
+    let imagePath;
+    if(req.file){
+         const url = req.protocol + '://' + req.get("host");
+          imagePath= url+"/images/"+ req.file.filename
+    }else{
+        imagePath = req.body.imagePath
+    }
+
     const post = new PostModel({
         _id: req.body.id,
         postTitle: req.body.postTitle,
-        postContent: req.body.postContent
+        postContent: req.body.postContent,
+        imagePath: imagePath
     });
+
+    console.log(post);
 
       PostModel.updateOne({_id: req.params.id}, post).then((response) => {
         console.log(response);

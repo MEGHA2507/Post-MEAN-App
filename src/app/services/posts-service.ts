@@ -82,19 +82,39 @@ export class PostsService {
 
   getPost(id:string){
     //return {...this.posts.find((post) => post.id === id)};
-    return this.http.get('http://localhost:3000/api/posts/'+id);
+    return this.http.get<{_id:string, title: string, content:string, imagePath: string}>('http://localhost:3000/api/posts/'+id);
   }
 
    editPost(id: string, title: string, content: string, image: any){
-    const post: Post = {id: id, postTitle: title, postContent: content, imagePath: image};
-     console.log(post);
+    let postData;
+    if(typeof(image) === 'object'){
+       postData = new FormData();
+       postData.append("id", id);
+        postData.append("postTitle", title);
+        postData.append("postContent", content);
+        postData.append("image", image, title);
+    }else{
+      postData = {
+        id: id, 
+        postTitle: title, 
+        postContent: content, 
+        image: image
+      };
 
-    this.http.put<any>('http://localhost:3000/api/posts/'+id, post)
+    }
+
+    this.http.put<any>('http://localhost:3000/api/posts/'+id, postData)
     .subscribe((res) => {
       if(res){
         console.log(res);
         const updatedPosts = [...this.posts];
-        const oldPostIndex = updatedPosts.findIndex((e) => e.id === post.id);
+        const oldPostIndex = updatedPosts.findIndex((e) => e.id === id);
+        const post : Post = {
+          id: id, 
+          postTitle: title, 
+          postContent: content, 
+          imagePath: image
+        }
         updatedPosts[oldPostIndex] = post;
         this.posts = updatedPosts;
         this.postsUpdated.next([...this.posts]);

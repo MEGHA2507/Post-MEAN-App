@@ -72,7 +72,10 @@ export class PostCreate implements OnInit{
           this.postForm.patchValue({
             postTitle: this.post.postTitle,
             postContent: this.post.postContent,
+            imagePath: this.post.imagePath
           });
+
+          this.imagePreview = this.post.imagePath
 
         });
       }else{

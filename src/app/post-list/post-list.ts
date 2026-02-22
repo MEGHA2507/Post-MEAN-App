@@ -42,15 +42,11 @@ export class PostList implements OnInit, OnDestroy{
           this.pageLength = res?.maxPosts;
           this.cd.detectChanges();
         });
-        
-
     } 
 
     onDelete(id:string){
-      console.log(id)
-      this.postsService.deletePost(id).subscribe(() => {
-        this.postsService.getPosts(this.postPerPage, this.currentPage);
-      });
+      this.postsService.deletePost(id);
+      this.ngOnInit();
     }
 
     onChangedPage(event:PageEvent){

@@ -61,7 +61,7 @@ export class PostsService {
 
   deletePost(id: string):any {
     this.http.delete('http://localhost:3000/api/posts/' + id)
-      .subscribe(() => {
+      .subscribe((res) => {
         // const updatedPosts = this.posts.filter(post => post.id !== id);
         // this.posts = updatedPosts;
 
@@ -69,6 +69,9 @@ export class PostsService {
         //   posts: [...this.posts],
         //   maxPosts: this.posts.length
         // });
+        if (res) {
+          this.router.navigate(['/']);
+        }
       });
   }
 

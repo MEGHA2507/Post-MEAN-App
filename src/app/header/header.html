@@ -1,9 +1,12 @@
 <mat-toolbar>
-    <span routerLink="/">Post List App</span>
+    <span routerLink="/" class="link">Post List App</span>
     <span class="spacer"></span>
     <ul>
         <li>
-            <a mat-button routerLink="/createPost" routerLinkActive="mat-accent">New Post</a>
+            <a mat-button routerLink="/createPost" routerLinkActive="active-link" class="link">New Post</a>
+        </li>
+        <li>
+            <a mat-button routerLink="/login" routerLinkActive="active-link" class="link">Login</a>
         </li>
     </ul>
 </mat-toolbar>

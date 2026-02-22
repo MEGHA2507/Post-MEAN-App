@@ -1,1 +1,14 @@
-<p>signup works!</p>
+<mat-card>
+    <h2>Sign Up</h2>
+    <form [formGroup]="signupForm" (click)="signupSubmit()">
+        <mat-form-field>
+            <input matInput type="email" formControlName="email" placeholder="Enter Email">
+            <mat-error *ngIf="signupForm.get('email')?.invalid">Please enter a email!!</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput type="password" formControlName="password" placeholder="Enter Password">
+            <mat-error *ngIf="signupForm.get('password')?.invalid">Please enter a password!!</mat-error>
+        </mat-form-field>
+        <button mat-raised-button type="submit" [disabled]="signupForm.invalid">Sign Up</button>
+    </form>
+</mat-card>

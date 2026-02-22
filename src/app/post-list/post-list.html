@@ -17,6 +17,15 @@
       </mat-action-row>
     </mat-expansion-panel>
   </mat-accordion>
+
+  <mat-paginator *ngIf="posts.length > 0"
+  [length]="pageLength"
+              [pageSize]="postPerPage"
+              [pageSizeOptions]="pageSizeOptions"
+              (page)="onChangedPage($event)"
+              aria-label="Select page">
+</mat-paginator>
+
 </div>
 
 <p class="mat-body-1 info-text" *ngIf="posts.length === 0 && !isLoading">

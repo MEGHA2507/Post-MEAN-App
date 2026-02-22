@@ -7,11 +7,11 @@ import { Subscription } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-
+import {MatPaginatorModule, PageEvent} from '@angular/material/paginator';
 
 @Component({
   selector: 'app-post-list',
-  imports: [MatExpansionModule, MatProgressSpinnerModule, RouterLink ,CommonModule, MatButtonModule],
+  imports: [MatExpansionModule, MatProgressSpinnerModule, RouterLink ,CommonModule, MatButtonModule, MatPaginatorModule],
   templateUrl: './post-list.html',
   styleUrl: './post-list.scss',
 })
@@ -21,27 +21,44 @@ export class PostList implements OnInit, OnDestroy{
   postResponseAvailable = false;
   isLoading = false;
 
+  pageLength = 5;
+  postPerPage = 2;
+  currentPage = 1;
+  pageSizeOptions = [1, 5, 10, 25, 50, 75, 100];
+
     constructor(
       private postsService: PostsService, 
       private cd: ChangeDetectorRef){}
 
     ngOnInit(): void {
-      this.isLoading = true;
-       this.postsService.getPosts();
+      //this.isLoading = true;
+      this.postsService.getPosts(this.postPerPage ,this.currentPage);
       this.postsSub = this.postsService
         .getPostUpdateLister()
-        .subscribe((res: Post[]) => {
-          if(res){
-            this.isLoading = false;
-             this.posts = res;
-              this.cd.detectChanges(); 
-          }
+        .subscribe((res) => {
+          //this.isLoading = false;
+          console.log(res);
+          this.posts = res?.posts;
+          this.pageLength = res?.maxPosts;
+          this.cd.detectChanges();
         });
+        
+
     } 
 
     onDelete(id:string){
       console.log(id)
-      this.postsService.deletePost(id);
+      this.postsService.deletePost(id).subscribe(() => {
+        this.postsService.getPosts(this.postPerPage, this.currentPage);
+      });
+    }
+
+    onChangedPage(event:PageEvent){
+      console.log(event);
+      //this.isLoading = true;
+      this.currentPage =  event.pageIndex +1;
+      this.postPerPage = event.pageSize;
+      this.postsService.getPosts(this.postPerPage, this.currentPage);
     }
 
     ngOnDestroy(): void {

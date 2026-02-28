@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatError, MatFormField } from '@angular/material/select';
+import { AuthService } from '../auth/auth-service';
 
 @Component({
   selector: 'app-login',
@@ -15,6 +16,8 @@ import { MatError, MatFormField } from '@angular/material/select';
 export class Login implements OnInit{
   loginForm!: FormGroup;
 
+  constructor(private authService: AuthService){}
+
   ngOnInit(): void {
     this.loginForm = new FormGroup({
       email: new FormControl('', {validators: [Validators.required, Validators.email]}),
@@ -24,7 +27,12 @@ export class Login implements OnInit{
 
   loginSubmit(){
     console.log(this.loginForm.value);
-    //this.loginForm.reset();
+    if(this.loginForm.invalid){
+      return;
+    }
+
+    this.authService.login(this.loginForm.value.email, this.loginForm.value.password);
+    this.loginForm.reset();
   }
 
 }

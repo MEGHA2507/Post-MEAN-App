@@ -6,6 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormField, MatError } from '@angular/material/select';
 import { AuthService } from '../auth/auth-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signup',
@@ -16,7 +17,8 @@ import { AuthService } from '../auth/auth-service';
 export class Signup {
   signupForm!: FormGroup;
 
-  constructor(private authService: AuthService, private cd: ChangeDetectorRef){}
+  constructor(private authService: AuthService, private cd: ChangeDetectorRef,
+    private router: Router){}
 
   ngOnInit(): void {
     this.signupForm = new FormGroup({
@@ -32,7 +34,7 @@ export class Signup {
     }
 
     this.authService.createUser(this.signupForm.value.email, this.signupForm.value.password);
-    this.signupForm.reset();
+    this.router.navigate(['/']);
     this.cd.detectChanges();
   }
 }

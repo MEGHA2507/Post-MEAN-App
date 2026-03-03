@@ -6,6 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatError, MatFormField } from '@angular/material/select';
 import { AuthService } from '../auth/auth-service';
+import { Route, Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,10 @@ import { AuthService } from '../auth/auth-service';
 export class Login implements OnInit{
   loginForm!: FormGroup;
 
-  constructor(private authService: AuthService){}
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ){}
 
   ngOnInit(): void {
     this.loginForm = new FormGroup({
@@ -32,7 +36,7 @@ export class Login implements OnInit{
     }
 
     this.authService.login(this.loginForm.value.email, this.loginForm.value.password);
-    this.loginForm.reset();
+    this.router.navigate(['/']);
   }
 
 }

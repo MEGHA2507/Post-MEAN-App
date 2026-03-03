@@ -3,6 +3,7 @@ import { Post } from '../model/post.model';
 import { map, Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { AuthService } from '../auth/auth-service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +18,8 @@ export class PostsService {
     maxPosts: number
   }>();
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, 
+    private router: Router) {}
 
   // ✅ FIXED PAGINATION
   getPosts(postsPerPage: number, currentPage: number) {

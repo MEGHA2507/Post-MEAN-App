@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatPaginatorModule, PageEvent} from '@angular/material/paginator';
+import { AuthService } from '../auth/auth-service';
 
 @Component({
   selector: 'app-post-list',
@@ -26,8 +27,12 @@ export class PostList implements OnInit, OnDestroy{
   currentPage = 1;
   pageSizeOptions = [1, 5, 10, 25, 50, 75, 100];
 
+  private authStatusSub!: Subscription;
+  userIsAuthenticated!: boolean;
+
     constructor(
       private postsService: PostsService, 
+      private authService: AuthService,
       private cd: ChangeDetectorRef){}
 
     ngOnInit(): void {
@@ -41,6 +46,14 @@ export class PostList implements OnInit, OnDestroy{
           this.posts = res?.posts;
           this.pageLength = res?.maxPosts;
           this.cd.detectChanges();
+        });
+
+        this.userIsAuthenticated = this.authService.getIsAuth();
+
+        this.authStatusSub = this.authService.getAuthStatusListener().subscribe((res) => {
+          if(res){
+          this.userIsAuthenticated = res;
+          }
         });
     } 
 
@@ -59,6 +72,7 @@ export class PostList implements OnInit, OnDestroy{
 
     ngOnDestroy(): void {
       this.postsSub.unsubscribe();
+      this.authStatusSub.unsubscribe();
     }
   
 }

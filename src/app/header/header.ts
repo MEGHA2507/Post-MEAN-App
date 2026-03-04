@@ -22,13 +22,22 @@ export class Header implements OnInit, OnDestroy{
   ){}
 
   ngOnInit(): void {
-    this.authListenerSubs = this.authService.getAuthStatusListener().subscribe((res) => {
-      if(res){
-        console.log('user auth', res)
-      this.userIsAuthenticated = res;
-      }
-      
-    });
+    // also initialize current state
+    this.userIsAuthenticated = this.authService.getIsAuth();
+
+    this.authListenerSubs = this.authService
+      .getAuthStatusListener()
+      .subscribe((res) => {
+
+        console.log('Auth changed:', res);
+
+        this.userIsAuthenticated = res;   // ✅ update always
+      });
+  }
+
+  onLogOut(){
+    console.log('logout')
+    this.authService.logout();
   }
 
   ngOnDestroy(): void {

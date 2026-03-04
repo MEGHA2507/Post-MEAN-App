@@ -7,9 +7,9 @@ import { Subject } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthService {
-  private token! : string;
+  private token! : string | null;
   private authStatusListener = new Subject<boolean>();
-  
+  isAuthenticated = false;
 
   constructor(private http: HttpClient){}
 
@@ -19,6 +19,10 @@ export class AuthService {
 
   getAuthStatusListener(){
     return this.authStatusListener.asObservable();
+  }
+
+  getIsAuth(){
+    return this.isAuthenticated;
   }
 
   createUser(email:string, password:string){
@@ -33,20 +37,37 @@ export class AuthService {
     });
   }
 
-  login(email:string, password:string){
-    const authData: AuthData = {
-      email: email,
-      password: password
-    }
+  login(email: string, password: string) {
 
-    this.http.post<{token:string}>("http://localhost:3000/api/user/login", authData)
+    const authData: AuthData = { email, password };
+
+    this.http.post<{token:string}>(
+      "http://localhost:3000/api/user/login",
+      authData
+    )
     .subscribe(response => {
-      console.log(response);
-      const token = response.token;
-      this.token = token;
-      this.authStatusListener.next(true);
-    });
 
+      const token = response.token;
+
+      if(token){
+        this.token = token;
+        this.isAuthenticated = true;
+
+        localStorage.setItem('token', token);  // ✅ store token
+
+        this.authStatusListener.next(true);
+      }
+
+    });
+  }
+
+  logout(){
+    this.token = null;
+    this.isAuthenticated = false;
+
+    localStorage.removeItem('token');   // ✅ remove token
+
+    this.authStatusListener.next(false);
   }
   
 }

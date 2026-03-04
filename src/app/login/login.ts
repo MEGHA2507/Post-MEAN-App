@@ -36,7 +36,6 @@ export class Login implements OnInit{
     }
 
     this.authService.login(this.loginForm.value.email, this.loginForm.value.password);
-    this.router.navigate(['/']);
   }
 
 }

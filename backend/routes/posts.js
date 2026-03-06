@@ -35,7 +35,8 @@ router.post('', checkAuth, multer({storage:storage}).single("image"), (request, 
     const post = new PostModel({
         postTitle: request.body.postTitle,
         postContent: request.body.postContent,
-        imagePath: url+"/images/"+ request.file.filename
+        imagePath: url+"/images/"+ request.file.filename,
+        creator: request.userData.userId
     });
    
       post.save().then((res) => {
@@ -82,12 +83,18 @@ router.get('', (request, response, next) => {
 
 
 router.delete("/:id",  checkAuth,  (req, res, next) => {
-    PostModel.deleteOne({ _id: req.params.id }).then(result => {
-    res.status(200).json({ message: "Post deleted!" });
+    PostModel.deleteOne({ _id: req.params.id,creator: req.userData.userId }).then(result => {
+        console.log(result);
+        if(result.modifiedCount > 0){
+            res.status(200).json({ message: "Deletion successful"})
+        }else{
+            res.status(401).json({ message: "Not Authorized !!"})
+        }
+   // res.status(200).json({ message: "Post deleted!" });
   });
 });
 
-router.put("/:id",  multer({storage:storage}).single("image"),  (req, res, next) => {
+router.put("/:id", checkAuth, multer({storage:storage}).single("image"),  (req, res, next) => {
     let imagePath;
     if(req.file){
          const url = req.protocol + '://' + req.get("host");
@@ -103,8 +110,14 @@ router.put("/:id",  multer({storage:storage}).single("image"),  (req, res, next)
         imagePath: imagePath
     });
 
-      PostModel.updateOne({_id: req.params.id}, post).then((response) => {
-        res.status(200).json({ message: "Update successful"})
+      PostModel.updateOne({_id: req.params.id, creator: req.userData.userId}, post).then((response) => {
+        console.log(response);
+        if(response.modifiedCount > 0){
+            res.status(200).json({ message: "Update successful"})
+        }else{
+            res.status(401).json({ message: "Not Authorized !!"})
+        }
+        //res.status(200).json({ message: "Update successful"})
     })
 });
 

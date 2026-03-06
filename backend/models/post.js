@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
 
 const postSchema = mongoose.Schema({
-   postTitle: { type: String },
-  postContent: { type: String },
-  imagePath: {type: String}
+  postTitle: { type: String ,required: true},
+  postContent: { type: String ,required: true},
+  imagePath: {type: String,required: true},
+  creator: { type: mongoose.Schema.Types.ObjectId, ref: "User",required: true }
 });
 
 module.exports = mongoose.model('Post', postSchema);

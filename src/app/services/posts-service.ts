@@ -34,11 +34,13 @@ export class PostsService {
         map((postData) => {
           return {
             posts: postData.posts.map((post: any) => {
+              console.log(post)
               return {
                 id: post._id,
                 postTitle: post.postTitle,
                 postContent: post.postContent,
-                imagePath: post.imagePath
+                imagePath: post.imagePath,
+                creator: post.creator
               };
             }),
             maxPosts: postData.maxPosts

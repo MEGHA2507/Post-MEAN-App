@@ -56,12 +56,14 @@ export class PostCreate implements OnInit{
         
         this.postsService.getPost(this.postId).subscribe((res: any) => {
           if(res){
+            console.log(res);
            
             this.post = {
               id: res._id,
               postTitle: res.postTitle,
               postContent: res.postContent,
-              imagePath: res.imagePath
+              imagePath: res.imagePath,
+              creator: res.creator
             }
             this.postEditData = true;
              this.isLoading = false;
@@ -101,7 +103,7 @@ export class PostCreate implements OnInit{
         this.postsService.addPost('', this.postForm.value.postTitle, this.postForm.value.postContent, this.postForm.value.postImage);
         this.isLoading = false;
     }else{
-      this.postsService.editPost(this.postId, this.postForm.value.postTitle, this.postForm.value.postContent, this.postForm.value.postImage);
+      this.postsService.editPost(this.postId, this.postForm.value.postTitle, this.postForm.value.postContent, this.postForm.value.postImage, '');
       this.isLoading = false;
     }
 

@@ -99,11 +99,12 @@ export class PostsService {
       _id: string,
       postTitle: string,
       postContent: string,
-      imagePath: string
+      imagePath: string,
+       creator: string
     }>('http://localhost:3000/api/posts/' + id);
   }
 
-  editPost(id: string, title: string, content: string, image: any) {
+  editPost(id: string, title: string, content: string, image: any, creator:string) {
 
     let postData;
 
@@ -118,7 +119,8 @@ export class PostsService {
         id: id,
         postTitle: title,
         postContent: content,
-        image: image
+        image: image,
+        creator: null
       };
     }
 

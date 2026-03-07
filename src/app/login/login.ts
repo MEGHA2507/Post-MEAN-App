@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatError, MatFormField } from '@angular/material/select';
 import { AuthService } from '../auth/auth-service';
 import { Route, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -16,6 +17,7 @@ import { Route, Router } from '@angular/router';
 })
 export class Login implements OnInit{
   loginForm!: FormGroup;
+    private authStatusSub!: Subscription;
 
   constructor(
     private authService: AuthService,
@@ -23,6 +25,12 @@ export class Login implements OnInit{
   ){}
 
   ngOnInit(): void {
+     this.authStatusSub = this.authService.getAuthStatusListener().subscribe(
+      authStatus => {
+       // this.isLoading = false;
+      }
+    );
+    
     this.loginForm = new FormGroup({
       email: new FormControl('', {validators: [Validators.required, Validators.email]}),
       password: new FormControl('', {validators: Validators.required})
@@ -36,6 +44,10 @@ export class Login implements OnInit{
     }
 
     this.authService.login(this.loginForm.value.email, this.loginForm.value.password);
+  }
+  
+  ngOnDestroy(){
+    this.authStatusSub.unsubscribe();
   }
 
 }

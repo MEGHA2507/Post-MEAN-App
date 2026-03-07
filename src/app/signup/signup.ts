@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormField, MatError } from '@angular/material/select';
 import { AuthService } from '../auth/auth-service';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-signup',
@@ -16,11 +17,18 @@ import { Router } from '@angular/router';
 })
 export class Signup {
   signupForm!: FormGroup;
+  private authStatusSub!: Subscription;
 
   constructor(private authService: AuthService, private cd: ChangeDetectorRef,
     private router: Router){}
 
   ngOnInit(): void {
+    this.authStatusSub = this.authService.getAuthStatusListener().subscribe(
+      authStatus => {
+       // this.isLoading = false;
+      }
+    );
+
     this.signupForm = new FormGroup({
       email: new FormControl('', {validators: [Validators.required, Validators.email]}),
       password: new FormControl('', {validators: Validators.required})
@@ -36,5 +44,9 @@ export class Signup {
     this.authService.createUser(this.signupForm.value.email, this.signupForm.value.password);
     this.router.navigate(['/']);
     this.cd.detectChanges();
+  }
+
+  ngOnDestroy(){
+    this.authStatusSub.unsubscribe();
   }
 }

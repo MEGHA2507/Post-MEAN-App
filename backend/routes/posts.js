@@ -39,7 +39,7 @@ router.post('', checkAuth, multer({storage:storage}).single("image"), (request, 
         creator: request.userData.userId
     });
    
-      post.save().then((res) => {
+    post.save().then((res) => {
         response.status(201).json({
             message: "Post added successfully !!",
             post: {
@@ -48,6 +48,10 @@ router.post('', checkAuth, multer({storage:storage}).single("image"), (request, 
                 postContent: res.postContent,
                 imagePath: res.imagePath
             }
+        });
+    }).catch(error => {
+        res.status(500).json({
+            message: "Creating a post failed!"
         });
     });
    
@@ -76,8 +80,13 @@ router.get('', (request, response, next) => {
    .then(count => {
     response.status(200).json({
        posts: fetchedPosts,
-       maxPosts: count
-    })
+       maxPosts: count,
+       message: "Posts fetched successfully!"
+    });
+   }).catch(error => {
+        res.status(500).json({
+            message: "Fetching posts failed!"
+        })
    })
 });
 
@@ -91,7 +100,11 @@ router.delete("/:id",  checkAuth,  (req, res, next) => {
             res.status(401).json({ message: "Not Authorized !!"})
         }
    // res.status(200).json({ message: "Post deleted!" });
-  });
+  }).catch(error => {
+        res.status(500).json({
+            message: "Fetching posts failed!"
+        })
+    })
 });
 
 router.put("/:id", checkAuth, multer({storage:storage}).single("image"),  (req, res, next) => {
@@ -119,6 +132,10 @@ router.put("/:id", checkAuth, multer({storage:storage}).single("image"),  (req, 
             res.status(401).json({ message: "Not Authorized !!"})
         }
         //res.status(200).json({ message: "Update successful"})
+    }).catch(error => {
+        res.status(500).json({
+            message: "Couldn't update post!"
+        })
     })
 });
 
@@ -127,7 +144,7 @@ router.get("/:id",   (req, res, next) => {
         if(post){
             res.status(200).json(post);
         }else{
-            res.status(404).json({message: 'Post not found!!'})
+            res.status(404).json({message: 'Fetching post failed!'})
         }
     })
 });

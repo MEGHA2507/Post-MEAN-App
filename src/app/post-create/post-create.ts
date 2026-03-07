@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { ReactiveFormsModule, NgForm, FormGroup, FormControl, Validators } from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
@@ -9,6 +9,8 @@ import { PostsService } from '../services/posts-service';
 import { ActivatedRoute, Router } from '@angular/router';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { mimeType } from './mime-type.validator';
+import { Subscription } from 'rxjs';
+import { AuthService } from '../auth/auth-service';
 
 @Component({
   selector: 'app-post-create',
@@ -16,7 +18,7 @@ import { mimeType } from './mime-type.validator';
   templateUrl: './post-create.html',
   styleUrls: ['./post-create.scss'],
 })
-export class PostCreate implements OnInit{
+export class PostCreate implements OnInit, OnDestroy{
 
   enteredContent = '';
   enteredTitle = '';
@@ -29,11 +31,13 @@ export class PostCreate implements OnInit{
 
   postForm!: FormGroup;
   imagePreview!: string;
+  private authStatusSUb!: Subscription;
 
   constructor(private postsService: PostsService,
     public route: ActivatedRoute,
     private router: Router,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private authService: AuthService
   ){
 
   }
@@ -47,7 +51,10 @@ export class PostCreate implements OnInit{
   }
 
   ngOnInit(): void {
-    this.isLoading = false;
+    this.authStatusSUb = this.authService.getAuthStatusListener().subscribe((res) => {
+      this.isLoading = false; 
+    });
+    
     this.createPostForm();
     this.route.paramMap.subscribe((res) => {
       if(res.has('id')){
@@ -131,5 +138,9 @@ export class PostCreate implements OnInit{
     };
 
     reader.readAsDataURL(file);
+  }
+
+  ngOnDestroy(): void {
+    this.authStatusSUb.unsubscribe();
   }
 }

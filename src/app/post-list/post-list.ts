@@ -62,7 +62,6 @@ export class PostList implements OnInit, OnDestroy{
 
     onDelete(id:string){
       this.postsService.deletePost(id);
-      this.ngOnInit();
     }
 
     onChangedPage(event:PageEvent){

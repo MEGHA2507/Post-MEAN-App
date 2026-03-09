@@ -1,11 +1,4 @@
-const express = require("express");
 const multer = require("multer");
-
-const PostsController = require("../controllers/posts");
-
-const router = express.Router();
-const checkAuth = require('../middleware/check-auth');
-const extractFile = require("../middleware/file");
 
 const MIME_TYPE_MAP = {
     'image/png': 'png',
@@ -29,24 +22,4 @@ const storage = multer.diskStorage({
     }
 });
 
-
-router.post('', 
-    checkAuth, 
-    extractFile, 
-    PostsController.addPost
-);
-
-router.get('', PostsController.getPost);
-
-router.delete("/:id",  checkAuth,  PostsController.deletePost);
-
-router.put("/:id",
-    checkAuth, 
-    extractFile,  
-    PostsController.updatePost
-    
-);
-
-router.get("/:id",  PostsController.getPostById);
-
-module.exports = router;
+module.exports =  multer({storage:storage}).single("image");

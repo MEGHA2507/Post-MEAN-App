@@ -74,7 +74,10 @@ export class PostsService {
         //   maxPosts: this.posts.length
         // });
         if (res) {
-          this.router.navigate(['/']);
+        //  this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+        //     this.router.navigate(['/']);
+        //   });
+       
         }
       });
   }

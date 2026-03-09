@@ -8,24 +8,26 @@ import { authGuard } from './auth/auth-guard';
 export const routes: Routes = [
     {
         path:'',
-        component: PostList
+        loadComponent: () => import('./post-list/post-list').then(c => c.PostList)
     },
     {
         path: 'createPost',
-        component: PostCreate,
+        loadComponent: () => import('./post-create/post-create').then(c => c.PostCreate),
         canActivate: [authGuard]
     },
     {
         path: 'editPost/:id',
-        component: PostCreate,
-          canActivate: [authGuard]
+        loadComponent: () => import('./post-create/post-create').then(c => c.PostCreate),
+        canActivate: [authGuard]
     },
     {
         path: 'signup',
-        component: Signup
+        loadComponent: () => import('./signup/signup').then(c => c.Signup),
+
     },
     {
         path: 'login',
-        component: Login
+        loadComponent: () => import('./login/login').then(c => c.Login),
+
     }
 ];

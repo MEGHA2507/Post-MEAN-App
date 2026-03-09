@@ -108,7 +108,7 @@ exports.updatePost = (req, res, next) => {
 
       PostModel.updateOne({_id: req.params.id, creator: req.userData.userId}, post).then((response) => {
         console.log(response);
-        if(response.n > 0){
+        if(response.modifiedCount > 0){
             res.status(200).json({ message: "Update successful"})
         }else{
             res.status(401).json({ message: "Not Authorized !!"})

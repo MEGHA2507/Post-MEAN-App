@@ -28,11 +28,11 @@ export class PostsService {
   // ✅ FIXED PAGINATION
   getPosts(postsPerPage: number, currentPage: number) {
 
-    const queryParams = `?pageSize=${postsPerPage}&page=${currentPage}`;
+    const url = `http://post-mean-app-env.eba-43t9aq35.us-east-1.elasticbeanstalk.com/api/posts?pageSize=${postsPerPage}&page=${currentPage}`;
 
     this.http
       .get<{ message: string, posts: any[], maxPosts: number }>(
-        BackendUrl + queryParams
+        url
       )
       .pipe(
         map((postData) => {
@@ -81,7 +81,7 @@ export class PostsService {
         //  this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
         //     this.router.navigate(['/']);
         //   });
-       
+          window.location.reload()
         }
       });
   }
@@ -93,7 +93,10 @@ export class PostsService {
     postData.append("postContent", content);
     postData.append("image", image, title);
 
-    this.http.post<any>( BackendUrl, postData)
+    this.http.post<any>( 
+      "http://post-mean-app-env.eba-43t9aq35.us-east-1.elasticbeanstalk.com/api/posts", 
+      postData
+    )
       .subscribe((res) => {
         if (res) {
           this.router.navigate(['/']);

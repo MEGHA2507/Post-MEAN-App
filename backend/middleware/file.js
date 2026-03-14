@@ -13,7 +13,7 @@ const storage = multer.diskStorage({
         if(isValid){
             error = null;
         }
-        cb(null, "backend/images"); //path it takes relative to the server.js file
+        cb(error, "images"); //path it takes relative to the server.js file
     },
     filename: (req, file, cb) => {
         const name = file.originalname.toLowerCase().split(' ').join('-');
@@ -22,4 +22,6 @@ const storage = multer.diskStorage({
     }
 });
 
-module.exports =  multer({storage:storage}).single("image");
+module.exports =  multer({storage:storage,
+  limits: { fileSize: 50 * 1024 * 1024 } //50MB
+}).single("image");
